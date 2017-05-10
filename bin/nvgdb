@@ -1,0 +1,13 @@
+#! /usr/bin/env python
+
+import subprocess
+import os
+import uuid
+import sys
+
+vim_command = "au VimEnter * :StartGdb {}".format(" ".join(sys.argv[1:]))
+
+print subprocess.check_output("nvim_update_plugins")
+print vim_command
+os.environ['NVIM_LISTEN_ADDRESS'] = "/tmp/nvgdb-{}.socket".format(uuid.uuid1())
+subprocess.check_call(["nvim", "-c", vim_command])
