@@ -1,4 +1,3 @@
-import contextlib
 from neovim import attach
 from os import environ
 import gdb
@@ -6,15 +5,22 @@ import gdb
 listen_address = environ['NVIM_LISTEN_ADDRESS']
 nvim = attach('socket', path=listen_address)
 
-nvim.command('vsplit | vsplit | split')
-nvim.command('set noswapfile')
-nvim.command('wincmd j | enew | wincmd l | enew | wincmd l | enew | wincmd h | wincmd h')
-
 
 class VimCmds(list):
 
     def render(self):
         return " | ".join(self)
+
+    def run(self):
+        nvim.command(self.render())
+
+
+VimCmds([
+    "set noswapfile",
+    'vsplit', 'vsplit', 'split',
+    "wincmd j", "enew", "wincmd l", "enew", "wincmd l", "enew", "wincmd h",
+    "wincmd h"
+]).run()
 
 
 class GdbPlugin(object):
@@ -33,6 +39,11 @@ class GdbPlugin(object):
         return self.ctx
 
     def stop_event_handler(self, event=None):
+        cmds = self.on_stop(event)
+        cmds.append("redraw!")
+        cmds.run()
+
+    def on_stop(self, event=None):
         try:
             f = gdb.selected_frame()
         except gdb.error:
@@ -77,8 +88,8 @@ class GdbPlugin(object):
 
         # Go to next window, meant to show langkit DSL source
 
-        cmds += ["wincmd h", "redraw!"]
-        nvim.command(cmds.render())
+        cmds += ["wincmd h"]
+        return cmds
 
 
 plugin = GdbPlugin()
