@@ -1,5 +1,12 @@
 #! /usr/bin/env python
 
 from neovim import attach
+from os import path as P
+
+sources_path = P.join(
+    P.dirname(P.dirname(P.realpath(__file__))), "src"
+)
 nvim = attach('child', argv=['nvim', '--embed'])
+
+print nvim.command_output('set rtp+={}'.format(sources_path))
 print nvim.command_output('UpdateRemotePlugins')
