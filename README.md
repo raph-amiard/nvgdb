@@ -5,7 +5,7 @@ Nvgdb is yet-another graphical front-end for GDB. I whipped it together after
 using [cgdb](https://cgdb.github.io/) for many years and growing frustrated
 with it (it's still great software, you should check it out !).
 
-[![asciicast](https://asciinema.org/a/510c21r893pvi9dnldqaavc2x.png)](https://asciinema.org/a/)
+[![asciicast](https://asciinema.org/a/510c21r893pvi9dnldqaavc2x.png)](https://asciinema.org/a/510c21r893pvi9dnldqaavc2x)
 
 why
 ---
