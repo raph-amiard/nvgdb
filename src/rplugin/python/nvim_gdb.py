@@ -10,6 +10,6 @@ class GdbPlugin(object):
     @neovim.command('StartGdb', range='', nargs='*', sync=True)
     def command_handler(self, args, range):
         gdb_args = [
-            "gdb", "-ex", "\"python import nvgdb_module\""
+            "gdb", "-ex", "\"python import nvgdb_module; nvgdb_module.main()\""
         ] + args
         self.vim.call("termopen", " ".join(gdb_args))

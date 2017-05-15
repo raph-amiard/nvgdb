@@ -17,7 +17,7 @@ os.environ['NVIM_LISTEN_ADDRESS'] = (
     "/tmp/nvgdb-{}.socket".format(uuid.uuid1())
 )
 os.environ['PYTHONPATH'] = (
-    os.environ['PYTHONPATH'] + ":{}".format(gdb_sources_path)
+    os.environ.get('PYTHONPATH', '') + ":{}".format(gdb_sources_path)
 )
 
 subprocess.check_call(["nvim", "-c", vim_command])
