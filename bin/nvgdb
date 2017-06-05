@@ -5,10 +5,13 @@ import os
 import uuid
 import sys
 from os import path as P
+import pipes
 
 gdb_sources_path = P.join(P.dirname(P.dirname(P.realpath(__file__))), "src")
 
-vim_command = "au VimEnter * :StartGdb {}".format(" ".join(sys.argv[1:]))
+vim_command = "au VimEnter * :StartGdb {}".format(" ".join(
+    pipes.quote(arg) for arg in sys.argv[1:]
+))
 
 print subprocess.check_output("nvim_update_plugins")
 print vim_command
