@@ -13,8 +13,8 @@ vim_command = "au VimEnter * :StartGdb {}".format(" ".join(
     pipes.quote(arg) for arg in sys.argv[1:]
 ))
 
-print subprocess.check_output("nvim_update_plugins")
-print vim_command
+subprocess.check_output("nvim_update_plugins")
+vim_command
 
 os.environ['NVIM_LISTEN_ADDRESS'] = (
     "/tmp/nvgdb-{}.socket".format(uuid.uuid1())
