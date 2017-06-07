@@ -82,7 +82,7 @@ class Cmd(object):
 
         :rtype: Cmd
         """
-        return Cmds([str(line_no), Cmd.normal("z.")])
+        return Cmds([str(line_no), Cmd.normal("z."), "redraw!"])
 
     @staticmethod
     def edit_file(file_name):
