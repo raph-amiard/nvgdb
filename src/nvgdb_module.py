@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 from neovim import attach
-from os import environ
+from os import environ, path as P
 import gdb
 
 DEBUG = False
@@ -150,12 +150,13 @@ class GdbPlugin(object):
             filename = sal.symtab.filename
             cmds.append(Cmd.focus_on(self.code_window))
 
-            if self.current_filename != filename:
-                cmds.append(Cmd.edit_file(filename))
-                self.current_filename = filename
+            if P.exists(filename):
+                if self.current_filename != filename:
+                    cmds.append(Cmd.edit_file(filename))
+                    self.current_filename = filename
 
-            # Go to line and center
-            cmds.append(Cmd.center_on_line(sal.line))
+                # Go to line and center
+                cmds.append(Cmd.center_on_line(sal.line))
 
         # Allow every extension to register commands
         for ext in self.extensions:
