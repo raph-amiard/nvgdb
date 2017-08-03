@@ -217,7 +217,10 @@ class LangkitGdbExtension(GdbPluginExtension):
 
             self.state_window = split(self.nvim)
             Cmds([
-                Cmd.focus_on(gdb_plugin.main_window), Cmd.normal("i")
+                Cmd.focus_on(self.state_window),
+                Cmd("set filetype=lalstate"),
+                Cmd.focus_on(gdb_plugin.main_window),
+                Cmd.normal("i")
             ]).run(self.nvim)
             self.is_init = True
 
@@ -263,7 +266,7 @@ class LangkitGdbExtension(GdbPluginExtension):
                     cmds.append(Cmd.focus_on(gdb_plugin.main_window))
 
             from langkit.gdb.commands import StatePrinter
-            pr = StatePrinter(ctx)
+            pr = StatePrinter(ctx, with_locs=True, with_ellipsis=False)
             state_str = pr.render().splitlines()
             if state_str:
                 self.state_window.buffer[:] = state_str

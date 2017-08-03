@@ -1,4 +1,9 @@
 import neovim
+from os import path as P
+
+sources_path = P.join(
+    P.dirname(P.dirname(P.dirname(P.realpath(__file__))))
+)
 
 
 @neovim.plugin
@@ -13,3 +18,5 @@ class GdbPlugin(object):
             "gdb", "-ex", "\"python import nvgdb_module; nvgdb_module.main()\""
         ] + args
         self.vim.call("termopen", " ".join(gdb_args))
+        self.vim.command("echo \"{}\"".format(sources_path))
+        self.vim.command("set rtp+={}".format(sources_path))
