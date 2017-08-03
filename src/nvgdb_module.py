@@ -114,6 +114,13 @@ class GdbPlugin(object):
 
     def __init__(self, nvim):
         gdb.events.stop.connect(self.on_stop)
+
+        try:
+            gdb.events.before_prompt.connect(self.on_stop)
+        except Exception, e:
+            print("WARNING: Your GDB version is too old. nvgdb won't work"
+                  " correctly. please update !")
+
         self.current_filename = ""
         self.nvim = nvim
 
