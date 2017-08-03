@@ -123,6 +123,7 @@ class GdbPlugin(object):
 
         self.current_filename = ""
         self.nvim = nvim
+        self.hl_source = nvim.new_highlight_source()
 
         # Global config
         Cmds([
@@ -130,6 +131,8 @@ class GdbPlugin(object):
             "set noswapfile",
             "set splitright",
             "set splitbelow",
+            "highlight NvgdbCurrent ctermbg=202 guibg=#ff5f00",
+            "set nocursorline"
         ]).run(self.nvim)
 
         # Create windows
@@ -164,6 +167,9 @@ class GdbPlugin(object):
 
                 # Go to line and center
                 cmds.append(Cmd.center_on_line(sal.line))
+                buf = self.code_window.buffer
+                buf.clear_highlight(self.hl_source)
+                buf.add_highlight("NvgdbCurrent", sal.line - 1, 0, -1, src_id=self.hl_source)
 
         # Allow every extension to register commands
         for ext in self.extensions:
@@ -248,6 +254,11 @@ class LangkitGdbExtension(GdbPluginExtension):
                         self.current_dsl_filename = sloc.filename
 
                     cmds.append(Cmd.center_on_line(sloc.line_no))
+                    buf = self.dsl_code_window.buffer
+                    buf.clear_highlight(gdb_plugin.hl_source)
+                    buf.add_highlight(
+                        "NvgdbCurrent", sloc.line_no - 1, 0, -1, src_id=gdb_plugin.hl_source
+                    )
                     cmds.append(Cmd.focus_on(gdb_plugin.main_window))
 
             from langkit.gdb.commands import StatePrinter
