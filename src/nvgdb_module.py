@@ -149,7 +149,8 @@ class GdbPlugin(object):
         try:
             f = gdb.selected_frame()
         except gdb.error:
-            pass
+            # If we get an error here, just return
+            return
 
         cmds = Cmds()
 
